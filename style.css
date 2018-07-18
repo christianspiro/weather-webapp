@@ -1,58 +1,33 @@
-@viewport {
-    width: device-width;
-    zoom: 1;
-  }
-  input[type="button"] {
-    background-color: #555555;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    padding: 16px 32px;
-    text-decoration: none;
-    margin: 4px 2px;
-    cursor: pointer;
-    font-family: "Montserrat";
-    display: inline-block;
-  }
-  
-  #main-container {
-    font-family: "Montserrat";
-    padding: 30px;
-  }
-  .weather-window {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0px 10px;
-    border-radius: 6px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-  }
-  .weather-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  @media screen and (max-width: 600px) {
-    .weather-list {
-      font-size: 25px;
-    }
-    .titles {
-      font-size: 32px;
-    }
-  }
-  @media screen and (min-width: 601px) {
-    .weather-list {
-      font-size: 30px;
-    }
-    .titles {
-      font-size: 37px;
-    }
-  }
-  
+@import "css/weather-icons.css";
+@import "css/weather-icons-wind.min.css";
+body {
+  font-family: Montserrat;
+}
+
+.main-container {
+  display: flex;
+  width: 80%;
+  flex-direction: row;
+  margin: auto;
+}
+
+.info-window {
+  display: flex;
+  width: 1fr;
+  margin: auto;
+}
+.info-window li {
+  list-style: none;
+}
+
+.icon-window {
+  width: 1fr;
+  display: flex;
+  margin: auto;
+}
+
+.titles {
+  text-align: center;
+}
+
+/*# sourceMappingURL=style.css.map */

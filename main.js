@@ -1,74 +1,435 @@
-window.onload = () => {
-    //btn function
-    let tempBool = true;
-    const btn = document.getElementById("change-unit");
-    const bgColors = {
-      freezing: "#6C8484",
-      cold: "#364A77",
-      cool: "#B28D45",
-      warm: "#B27645"
-    };
-  
-    const changeBg = cTemp => {
-      if (cTemp >= 15) {
-        document.body.style.backgroundColor = bgColors.warm;
-      } else if (cTemp >= 0) {
-        document.body.style.backgroundColor = bgColors.cool;
-      } else if (cTemp >= -5) {
-        document.body.style.backgroundColor = bgColors.cold;
-      } else if (cTemp >= -15) {
-        document.body.style.backgroundColor = bgColors.freezing;
-      }
-    };
-  
-    const changeUnits = cTemp => {
-      changeBg(cTemp);
-      btn.addEventListener("click", () => {
-        if (tempBool === true) {
-          document.querySelector(".temp").innerHTML =
-            Math.round(cTemp * (9 / 5) + 32) + "°F";
-          tempBool = false;
-        } else if (tempBool === false) {
-          document.querySelector(".temp").innerHTML = Math.round(cTemp) + "°C";
-          tempBool = true;
+(function () {
+ //Create variables
+
+    const weatherIconJSON = {
+        "200": {
+            "label": "thunderstorm with light rain",
+            "icon": "storm-showers"
+        },
+
+        "201": {
+            "label": "thunderstorm with rain",
+            "icon": "storm-showers"
+        },
+
+        "202": {
+            "label": "thunderstorm with heavy rain",
+            "icon": "storm-showers"
+        },
+
+        "210": {
+            "label": "light thunderstorm",
+            "icon": "storm-showers"
+        },
+
+        "211": {
+            "label": "thunderstorm",
+            "icon": "thunderstorm"
+        },
+
+        "212": {
+            "label": "heavy thunderstorm",
+            "icon": "thunderstorm"
+        },
+
+        "221": {
+            "label": "ragged thunderstorm",
+            "icon": "thunderstorm"
+        },
+
+        "230": {
+            "label": "thunderstorm with light drizzle",
+            "icon": "storm-showers"
+        },
+
+        "231": {
+            "label": "thunderstorm with drizzle",
+            "icon": "storm-showers"
+        },
+
+        "232": {
+            "label": "thunderstorm with heavy drizzle",
+            "icon": "storm-showers"
+        },
+
+        "300": {
+            "label": "light intensity drizzle",
+            "icon": "sprinkle"
+        },
+
+        "301": {
+            "label": "drizzle",
+            "icon": "sprinkle"
+        },
+
+        "302": {
+            "label": "heavy intensity drizzle",
+            "icon": "sprinkle"
+        },
+
+        "310": {
+            "label": "light intensity drizzle rain",
+            "icon": "sprinkle"
+        },
+
+        "311": {
+            "label": "drizzle rain",
+            "icon": "sprinkle"
+        },
+
+        "312": {
+            "label": "heavy intensity drizzle rain",
+            "icon": "sprinkle"
+        },
+
+        "313": {
+            "label": "shower rain and drizzle",
+            "icon": "sprinkle"
+        },
+
+        "314": {
+            "label": "heavy shower rain and drizzle",
+            "icon": "sprinkle"
+        },
+
+        "321": {
+            "label": "shower drizzle",
+            "icon": "sprinkle"
+        },
+
+        "500": {
+            "label": "light rain",
+            "icon": "rain"
+        },
+
+        "501": {
+            "label": "moderate rain",
+            "icon": "rain"
+        },
+
+        "502": {
+            "label": "heavy intensity rain",
+            "icon": "rain"
+        },
+
+        "503": {
+            "label": "very heavy rain",
+            "icon": "rain"
+        },
+
+        "504": {
+            "label": "extreme rain",
+            "icon": "rain"
+        },
+
+        "511": {
+            "label": "freezing rain",
+            "icon": "rain-mix"
+        },
+
+        "520": {
+            "label": "light intensity shower rain",
+            "icon": "showers"
+        },
+
+        "521": {
+            "label": "shower rain",
+            "icon": "showers"
+        },
+
+        "522": {
+            "label": "heavy intensity shower rain",
+            "icon": "showers"
+        },
+
+        "531": {
+            "label": "ragged shower rain",
+            "icon": "showers"
+        },
+
+        "600": {
+            "label": "light snow",
+            "icon": "snow"
+        },
+
+        "601": {
+            "label": "snow",
+            "icon": "snow"
+        },
+
+        "602": {
+            "label": "heavy snow",
+            "icon": "snow"
+        },
+
+        "611": {
+            "label": "sleet",
+            "icon": "sleet"
+        },
+
+        "612": {
+            "label": "shower sleet",
+            "icon": "sleet"
+        },
+
+        "615": {
+            "label": "light rain and snow",
+            "icon": "rain-mix"
+        },
+
+        "616": {
+            "label": "rain and snow",
+            "icon": "rain-mix"
+        },
+
+        "620": {
+            "label": "light shower snow",
+            "icon": "rain-mix"
+        },
+
+        "621": {
+            "label": "shower snow",
+            "icon": "rain-mix"
+        },
+
+        "622": {
+            "label": "heavy shower snow",
+            "icon": "rain-mix"
+        },
+
+        "701": {
+            "label": "mist",
+            "icon": "sprinkle"
+        },
+
+        "711": {
+            "label": "smoke",
+            "icon": "smoke"
+        },
+
+        "721": {
+            "label": "haze",
+            "icon": "day-haze"
+        },
+
+        "731": {
+            "label": "sand, dust whirls",
+            "icon": "cloudy-gusts"
+        },
+
+        "741": {
+            "label": "fog",
+            "icon": "fog"
+        },
+
+        "751": {
+            "label": "sand",
+            "icon": "cloudy-gusts"
+        },
+
+        "761": {
+            "label": "dust",
+            "icon": "dust"
+        },
+
+        "762": {
+            "label": "volcanic ash",
+            "icon": "smog"
+        },
+
+        "771": {
+            "label": "squalls",
+            "icon": "day-windy"
+        },
+
+        "781": {
+            "label": "tornado",
+            "icon": "tornado"
+        },
+
+        "800": {
+            "label": "clear sky",
+            "icon": "sunny"
+        },
+
+        "801": {
+            "label": "few clouds",
+            "icon": "cloudy"
+        },
+
+        "802": {
+            "label": "scattered clouds",
+            "icon": "cloudy"
+        },
+
+        "803": {
+            "label": "broken clouds",
+            "icon": "cloudy"
+        },
+
+        "804": {
+            "label": "overcast clouds",
+            "icon": "cloudy"
+        },
+
+
+        "900": {
+            "label": "tornado",
+            "icon": "tornado"
+        },
+
+        "901": {
+            "label": "tropical storm",
+            "icon": "hurricane"
+        },
+
+        "902": {
+            "label": "hurricane",
+            "icon": "hurricane"
+        },
+
+        "903": {
+            "label": "cold",
+            "icon": "snowflake-cold"
+        },
+
+        "904": {
+            "label": "hot",
+            "icon": "hot"
+        },
+
+        "905": {
+            "label": "windy",
+            "icon": "windy"
+        },
+
+        "906": {
+            "label": "hail",
+            "icon": "hail"
+        },
+
+        "951": {
+            "label": "calm",
+            "icon": "sunny"
+        },
+
+        "952": {
+            "label": "light breeze",
+            "icon": "cloudy-gusts"
+        },
+
+        "953": {
+            "label": "gentle breeze",
+            "icon": "cloudy-gusts"
+        },
+
+        "954": {
+            "label": "moderate breeze",
+            "icon": "cloudy-gusts"
+        },
+
+        "955": {
+            "label": "fresh breeze",
+            "icon": "cloudy-gusts"
+        },
+
+        "956": {
+            "label": "strong breeze",
+            "icon": "cloudy-gusts"
+        },
+
+        "957": {
+            "label": "high wind, near gale",
+            "icon": "cloudy-gusts"
+        },
+
+        "958": {
+            "label": "gale",
+            "icon": "cloudy-gusts"
+        },
+
+        "959": {
+            "label": "severe gale",
+            "icon": "cloudy-gusts"
+        },
+
+        "960": {
+            "label": "storm",
+            "icon": "thunderstorm"
+        },
+
+        "961": {
+            "label": "violent storm",
+            "icon": "thunderstorm"
+        },
+
+        "962": {
+            "label": "hurricane",
+            "icon": "cloudy-gusts"
         }
-      });
     };
-  
-    const weatherUpdate = (x, y) => {
-      let api =
-        "https://fcc-weather-api.glitch.me/api/current?lon=" + y + "&lat=" + x;
-      fetch(api)
+    const backColours = chroma.scale(['#ff0000','#a1d3cc']).mode('lch').colors(6);
+    let location = document.querySelector(".location"),
+        updateIcon = document.querySelector(".icon-window"),
+        wind = document.querySelector(".wind"),
+        speed = document.querySelector(".speed"),
+        temp = document.querySelector(".temp-now"),
+        windDirection,
+        longitude,
+        latitude,
+        prefix,
+        icon,
+        code;
+
+
+
+
+
+//Get Location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        document.getElementsByClassName(".titles").innerHTML = "Geolocation is not supported by this browser.";
+    }
+    function showPosition(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        getWeather();
+    }
+
+
+//get weather
+
+function getWeather() {
+    let apiKey = "&APPID=b00dc873a7c4e6d3168f7a51fc62af80"
+    let api = "https://api.openweathermap.org/data/2.5/weather?lat="+ latitude + "&lon="+ longitude+"&units=metric"+apiKey;
+    fetch(api)
         .then(function(response) {
-          return response.json();
+            return response.json();
+
         })
-        .then(function(weatherJson) {
-          document.querySelector(".icon").innerHTML =
-            "<img src=" + weatherJson.weather[0].icon + " ></img>";
-          document.querySelector(".location").innerHTML = weatherJson.name;
-          document.querySelector(".temp").innerHTML =
-            Math.round(weatherJson.main.temp) + "°C";
-          temp = Math.round(weatherJson.main.temp);
-          changeUnits(weatherJson.main.temp);
-        });
-    };
-  
-    const posCurrent = position => {
-      let x = position.coords.latitude;
-      let y = position.coords.longitude;
-      weatherUpdate(x, y);
-    };
-  
-    const getWeather = position => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          posCurrent(position);
-        });
-      } else {
-        alert("Not supported on this browser");
-      }
-    };
-  
-    getWeather();
-  };
-  
+        .then(function(resp) {
+         prefix = 'wi wi-';
+         code = resp.weather[0].id;
+         icon = weatherIconJSON[code].icon;
+         windDirection = resp.wind.deg;
+
+        // If we are not in the ranges mentioned above, add a day/night prefix.
+        if (!(code > 699 && code < 800) && !(code > 899 && code < 1000)) {
+            icon = 'day-' + icon;
+        }
+        console.log(resp);
+        // Finally tack on the prefix.
+        icon = prefix + icon;
+        //now change the weather and the icon
+            location.innerHTML = resp.name;
+            updateIcon.innerHTML = "<i class='"+icon+"'></i>";
+            wind.innerHTML = "<i class='wi wi-wind towards-"+windDirection+"-deg'></i>";
+            speed.innerHTML =  resp.wind.speed + " kph";
+            temp.innerHTML = resp.main.temp +" °C";
+            console.log(icon);
+
+    });
+}
+})();
+
