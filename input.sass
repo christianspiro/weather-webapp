@@ -1,26 +1,92 @@
 @import "css/weather-icons.css"
 @import "css/weather-icons-wind.min.css"
+$break-med: 700px
+$break-small: 400px
 body
   font-family: Montserrat
+  text-shadow: rgba(51,51,51,0.65) 4px 4px
+
 .main-container
   display: flex
-  width: 80%
-  flex-direction: row
+  flex-direction: column
+  margin: 0 auto
+  width: 100%
+  color: white
+  li
+    input
+      justify-self: center
+      width: 200px
+      border: none
+      box-shadow: 4px 4px 5px 0px rgba(51,51,51,0.65)
+      border-radius: 9px
+      font-size: 1em
+      background-color: white
+      color: #333333
+      outline: none
+      cursor: pointer
+
+.outer
+  position: absolute
   margin: auto
+  width: 40vw
+  height: 40vh
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  @media screen and (max-width: $break-small)
+    width: fit-content
+    height: fit-content
+    margin: auto
+    padding: 1vw
+
+  @media screen and (max-width: $break-med)
+    width: fit-content
+    height: fit-content
+    margin: auto
+    padding: 1vw
+.loading
+  margin: auto
+  text-align: center
+  font-size: 3em
+  color: #333333
 
 .info-window
   display: flex
   width: 1fr
   margin: auto
-  li
+  padding: 16px
+  ul
     list-style: none
+    padding-left: 0
+    li
+     list-style: none
+
+
 .icon-window
   width: 1fr
   display: flex
   margin: auto
-
+  i
+    font-size: 5em
+    margin: auto
+.weather-list
+  font-size: 2em
+.wind
+  width: 1fr
+  margin: auto
+  padding: 8px
+  i
+    font-size: 1em
 .titles
   text-align: center
+  text-shadow: rgba(51,51,51,0.65) 4px 4px
+
+
+
+.disabled
+  display: none
+
 
 
 

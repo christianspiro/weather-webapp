@@ -1,6 +1,5 @@
 (function () {
  //Create variables
-
     const weatherIconJSON = {
         "200": {
             "label": "thunderstorm with light rain",
@@ -368,18 +367,24 @@
             "icon": "cloudy-gusts"
         }
     };
-    const backColours = chroma.scale(['#ff0000','#a1d3cc']).mode('lch').colors(6);
+    let backColours = chroma.scale(['#ff0000','#a1d3cc']).mode('lch').colors(6);
     let location = document.querySelector(".location"),
         updateIcon = document.querySelector(".icon-window"),
         wind = document.querySelector(".wind"),
         speed = document.querySelector(".speed"),
         temp = document.querySelector(".temp-now"),
+        onOff = document.querySelector("#weather"),
+        loadMessage = document.querySelector(".loading"),
         windDirection,
         longitude,
         latitude,
         prefix,
         icon,
-        code;
+        code,
+        changeUnitsC,
+        changeUnitsF,
+        //btnBool is used to switch between C and F
+        btnBool = true;
 
 
 
@@ -412,7 +417,6 @@ function getWeather() {
          prefix = 'wi wi-';
          code = resp.weather[0].id;
          icon = weatherIconJSON[code].icon;
-         windDirection = resp.wind.deg;
 
         // If we are not in the ranges mentioned above, add a day/night prefix.
         if (!(code > 699 && code < 800) && !(code > 899 && code < 1000)) {
@@ -421,15 +425,60 @@ function getWeather() {
         console.log(resp);
         // Finally tack on the prefix.
         icon = prefix + icon;
-        //now change the weather and the icon
+        //now change the weather and the icons
             location.innerHTML = resp.name;
             updateIcon.innerHTML = "<i class='"+icon+"'></i>";
+            windDirection = resp.wind.deg;
             wind.innerHTML = "<i class='wi wi-wind towards-"+windDirection+"-deg'></i>";
-            speed.innerHTML =  resp.wind.speed + " kph";
-            temp.innerHTML = resp.main.temp +" °C";
-            console.log(icon);
+            speed.innerHTML =  "Wind Speed: "+resp.wind.speed+ " kph";
+            temp.innerHTML = resp.main.temp+" °C";
+            //Saving temp in C and F for button
+            changeUnitsC = resp.main.temp;
+            changeUnitsF = resp.main.temp *1.8 +32;
+            changeBackground(resp.main.temp);
+           onOff.classList.remove('disabled');
+           loadMessage.classList.add("disabled");
+
 
     });
+}
+
+//background variety based on temp
+function changeBackground(tempC){
+    if( tempC >= 30) {
+        d3.select("body").transition()
+            .style("background-color", backColours[0]);
+    } else if (tempC >= 25) {
+
+        d3.select("body").transition()
+            .style("background-color", backColours[1]);
+    } else if (tempC >= 20) {
+        d3.select("body").transition()
+            .style("background-color", backColours[2]);
+    } else if (tempC >=10) {
+
+        d3.select("body").transition()
+            .style("background-color", backColours[3]);
+    }else if (tempC >= 0) {
+        d3.select("body").transition()
+            .style("background-color", backColours[4]);
+    }
+      else {
+        d3.select("body").transition()
+                .style("background-color", backColours[5]);
+
+    }
+//finally the change temp function
+    document.querySelector('#change-unit').addEventListener("click",cToF);
+    function cToF(){
+        if(btnBool){
+            temp.innerHTML = changeUnitsF+" °F";
+            btnBool = false;
+        } else{
+            temp.innerHTML = changeUnitsC+" °C";
+            btnBool = true;
+        }
+    }
 }
 })();
 
